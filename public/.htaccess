@@ -1,0 +1,52 @@
+# ============================================================
+# Attendance Email System — Public Apache Security Rules
+# ============================================================
+
+# ── Security Headers ─────────────────────────────────────────
+<IfModule mod_headers.c>
+    # Prevent clickjacking
+    Header always set X-Frame-Options "SAMEORIGIN"
+    # Prevent MIME sniffing
+    Header always set X-Content-Type-Options "nosniff"
+    # Enable XSS filter in older browsers
+    Header always set X-XSS-Protection "1; mode=block"
+    # Restrict referrer info
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ── Block Direct Access to Sensitive Files ───────────────────
+# Deny access to .env and any hidden dot-files
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Block direct access to log files via web
+<FilesMatch "\.(log|txt|sql|sh|bat|lock)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Block composer files
+<FilesMatch "^composer\.(json|lock)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# ── Disable Directory Listing ────────────────────────────────
+Options -Indexes
+
+# ── PHP Error Display Override (belt-and-suspenders) ────────
+<IfModule mod_php.c>
+    php_flag display_errors Off
+    php_flag display_startup_errors Off
+    php_flag log_errors On
+</IfModule>
+
+# ── Optional: Protect setup_database.php from external IP ───
+# (Lock-file guard is the primary protection — this is extra)
+# If your server supports mod_rewrite:
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+</IfModule>

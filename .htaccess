@@ -1,0 +1,42 @@
+# ============================================================
+# Attendance Email System — Root Apache Security Rules
+# ============================================================
+# Blocks all direct web access to the project root.
+# Only the /public/ folder should be the web document root.
+# If your server serves the entire project folder, these
+# rules block access to sensitive directories and files.
+# ============================================================
+
+Options -Indexes
+
+# ── Block sensitive directories from direct web access ───────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Block access to src/, config/, database/, cron/, logs/, vendor/
+    RewriteRule ^(src|config|database|cron|logs|vendor)(/.*)?$ - [F,L]
+</IfModule>
+
+# ── Block all root-level PHP debug/utility scripts ───────────
+<FilesMatch "^(debug_filters|check_counts|check_subjects|check_students_sample|fix_login|import_faculty)\.php$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# ── Block environment and config files ───────────────────────
+<FilesMatch "^(\.env|\.env\.example|composer\.json|composer\.lock|MANUAL_DB_SETUP\.txt|COPY_TO_XAMPP\.bat|Run_Attendance_Mailer\.bat)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# ── Block hidden dot-files ────────────────────────────────────
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# ── Block log and sql files ───────────────────────────────────
+<FilesMatch "\.(log|sql|sh|bat|lock)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
