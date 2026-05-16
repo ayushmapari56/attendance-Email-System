@@ -1,66 +1,80 @@
-# 🎓 College Attendance Email Notification System
+# 🎓 JD College Attendance Email System
 
-A premium web-based portal for teachers to manage student attendance and automate daily reporting. Built with a focus on ease of use, aesthetics, and handling records at scale.
-
-## ✨ Core Features
-
-- **Premium Teacher Portal**: 
-    - 💎 Glassmorphism design for a modern, professional look.
-    - 📊 Real-time Dashboard with attendance insights.
-    - 🔍 Advanced filtering by Year, Branch, and Semester.
-- **Smart Management**:
-    - 👥 Student Management with bulk CSV upload.
-    - 📚 Subject Management with easy CSV import.
-- **Automation & Logs**:
-    - 📨 **Automated Reports**: Sends personalized emails to both present and absent students.
-    - 🖱️ **One-Click Trigger**: Send all daily reports directly from the web portal.
-    - 📜 **System Logs**: View execution history and delivery status directly in the browser.
-    - 🪟 **Windows Utility**: One-click `.bat` script for manual automation triggers.
-
-## 🛠️ System Requirements
-
-- **PHP**: 7.4 or higher
-- **MySQL/MariaDB**: 5.7+ (Recommended for XAMPP)
-- **Composer**: For dependency management
-- **Web Server**: Apache (XAMPP) or PHP built-in server
-
-## ⚙️ Setup & Installation
-
-### 1. Database Configuration
-1. Open **phpMyAdmin** (`http://localhost/phpmyadmin`).
-2. Create a database named `attendance_db`.
-3. Import `database/schema_mysql.sql` into the new database.
-4. *Note: If using XAMPP on port 3307, ensure your `.env` reflects this.*
-
-### 2. Environment Setup
-Copy `.env.example` to `.env` and configure:
-- `DB_HOST`, `DB_PORT` (3306 or 3307), `DB_NAME`, `DB_USER`, `DB_PASS`.
-- `SMTP_HOST`, `SMTP_USERNAME`, `SMTP_PASSWORD` (Use Gmail App Password).
-- `COLLEGE_NAME` to your institution's name.
-
-### 3. Install Dependencies
-```bash
-composer install
-```
-
-### 4. Run the Project
-- **Option A (XAMPP)**: Move the folder to `C:\xampp\htdocs\` and visit `http://localhost/attendance-email-system/public`.
-- **Option B (PHP Server)**: Run `php -S localhost:8000 -t public` in the project root.
-
-## 🚀 Usage
-
-1. **Login**: Use `admin` / `password123`.
-2. **Mark Attendance**: Navigate to the "Attendance" page, select filters, and mark students.
-3. **Send Emails**: 
-    - Go to the **Logs** page and click **"Send Daily Reports Now"**.
-    - Or run the **`Run_Attendance_Mailer.bat`** file from the root folder.
-
-## 📂 Project Structure
-- `public/`: Web root (UI, API endpoints).
-- `src/`: Backend logic (Database, Attendance Processor, Email Sender).
-- `cron/`: Core automation script logic.
-- `logs/`: Daily execution logs.
-- `database/`: SQL schemas and seed data.
+This is a comprehensive, production-ready web portal designed to digitize daily attendance tracking for educational institutions. It allows faculty to mark student attendance efficiently and automatically sends daily attendance reports to both students and their parents via email using a scheduled Windows Task.
 
 ---
-*Created for JD College Engineering & Management*
+
+## 🚀 Features
+*   **Role-Based Access Control**: Separate dashboards for Faculty, Head of Departments (HOD), and the Principal.
+*   **Automated Daily Emails**: A Windows Scheduled Task triggers emails at 6:00 PM automatically.
+*   **Smart Skip Logic**: Automatically skips sending emails on Sundays, declared holidays, or if no attendance was marked.
+*   **Principal Analytics Dashboard**: Real-time monitoring of branch-wise attendance percentages.
+*   **Bulk Management**: HODs can upload Students and Subjects via CSV files.
+
+---
+
+## 🛠️ Technology Stack Used
+
+*   **Frontend**: HTML5, CSS3, Vanilla JavaScript (Modern UI with Glassmorphism, FontAwesome 6, Google Fonts 'Inter' & 'Outfit').
+*   **Backend**: PHP 8.x (OOP Architecture).
+*   **Database**: MySQL / MariaDB (Hosted via XAMPP).
+*   **Security**: 100% PDO Prepared Statements (SQL Injection prevention), CSRF Tokens on all forms, 15-minute brute-force lockout, and `.htaccess` file protections.
+*   **Libraries**: 
+    *   `phpmailer/phpmailer` (for secure SMTP emails)
+    *   `vlucas/phpdotenv` (for `.env` management)
+
+---
+
+## 🔑 Default Administrator Credentials
+
+Upon fresh installation, use the following credentials to access the Principal/Admin dashboard. 
+*(Note: Please change the password immediately after your first login).*
+
+*   **Username:** `admin`
+*   **Password:** `password123`
+*   **Role:** Principal / Admin
+
+---
+
+## 📖 How to Run the Project (Installation Guide)
+
+Follow these steps to deploy the project on a local XAMPP server or a college production server:
+
+### Step 1: Clone or Copy the Project
+Clone or copy the entire repository into your XAMPP `htdocs` directory.
+*   Path: `C:\xampp\htdocs\attendance-email-system`
+
+### Step 2: Configure Environment Variables
+1.  Duplicate the `.env.example` file and rename the copy to `.env`.
+2.  Open `.env` in a text editor and configure your database and email credentials:
+    ```env
+    DB_HOST=localhost
+    DB_PORT=3306
+    DB_NAME=attendance_db
+    DB_USER=root
+    DB_PASS=
+    
+    SMTP_HOST=smtp.gmail.com
+    SMTP_PORT=587
+    SMTP_USERNAME=your-college-email@gmail.com
+    SMTP_PASSWORD=your-google-app-password
+    ```
+
+### Step 3: Install PHP Dependencies (Composer)
+1.  Open a terminal inside the project folder.
+2.  Run the command: `composer install`
+
+### Step 4: Run the One-Click Database Setup
+1.  Start **Apache** and **MySQL** from your XAMPP Control Panel.
+2.  Open your web browser and go to: 
+    `http://localhost/attendance-email-system/public/setup_database.php`
+3.  The system will automatically create the database, tables, and the default admin user. *(Note: After a successful run, this file automatically locks itself for security).*
+
+### Step 5: Log In
+1.  Navigate to the login page: `http://localhost/attendance-email-system/public/index.php`
+2.  Use the default credentials to log in.
+
+### Step 6: Enable Automated 6:00 PM Emails
+1.  Navigate to the project root folder in Windows Explorer.
+2.  Right-click the `Setup_Daily_Mailer_Task.bat` file and select **"Run as Administrator"**.
+3.  This automatically configures the Windows Task Scheduler to send attendance emails every day at exactly 6:00 PM.
