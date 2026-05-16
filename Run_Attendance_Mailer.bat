@@ -25,8 +25,9 @@ echo [ERROR] PHP was not found in your system.
 echo 1. Ensure XAMPP is installed.
 echo 2. Ensure MySQL (XAMPP) is running.
 echo.
+if "%~1"=="--cron" exit /b 1
 pause
-exit
+exit /b 1
 
 :RUN
 echo [INFO] Found PHP. Starting process...
@@ -36,5 +37,6 @@ echo.
 echo ---------------------------------------------------
 echo  Process Finished. Verify details in Logs.
 echo ---------------------------------------------------
+if "%~1"=="--cron" exit /b 0
 echo Press any key to exit...
 pause > nul
